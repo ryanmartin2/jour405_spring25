@@ -9,6 +9,8 @@ In this assignment, we will be working with a dataset of total crimes reported b
 You will need to load the tidyverse library and the janitor library
 
 ```{r}
+library(tidyverse)
+library(janitor)
 ```
 
 Then you'll load the data from the web. The URL for the data is: https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_cities_crime_2019_2020.csv. You will create a dataframe called `md_cities` that contains the data from this URL.
@@ -16,19 +18,23 @@ Then you'll load the data from the web. The URL for the data is: https://raw.git
 ### Task 2: Load the Data
 
 ```{r}
+City_crime <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/md_cities_crime_2019_2020.csv")
 ```
 ### Task 3: Calculating Rates
 
 Calculate violent and property crime rates for each city for both years using `mutate()`. You'll create four new columns: `violent_rate_2019`, `property_rate_2019`, `violent_rate_2020`, and `property_rate_2020`. You'll need to figure out the proper unit rate, given that there are varying populations. There's no perfect choice; choose the one that works best for you. Save the results to a new dataframe called `md_cities_rates`.
 
 ```{r}
+
+md_cities_rates <- City_crime |> mutate(violent_rate_2019 = violent2019/pop2019*10000, property_rate_2019 = property2019/pop2019*10000, violent_rate_2020 = violent2020/pop2020*10000, property_rate_2020 = property2020/pop2020*10000)
+
 ```
 
 ### Task 4: Describe the Rates
 
 Examine the new dataframe, `md_cities_rates`, by clicking on it in the Environment tab in RStudio and sorting by the rate columns. Write a couple of sentences about the results, comparing and contrasting the cities with the highest rates (both violent and property) in 2019 and 2020. Do you see any patterns? What does this tell you about crime in Maryland cities? What's the story here?
 
-ANSWER HERE
+In 2019, the cities with the highest rates for both violent crimes were Baltimore and Ocean City while the highest for property crimes were Ocean City and Oakland. In 2020, Ocean City still had the most violent crimes and property crimes. I think this pattern tells us that Maryland crime has concentrated areas of crime where crime is being reported but not dealt with properly. The story here is that even though high rates of crime are being reported in Ocean City, MD, locals aren't doing anything productively to curb the behavior. 
 
 
 ### Task 5: Calculate Percentage Change
@@ -36,19 +42,22 @@ ANSWER HERE
 Let's add two percentage change columns to your dataframe: one for violent crime rates and one for property crime rates. You'll calculate the percentage change between 2019 and 2020 for each city. Save the results to a new dataframe called `md_cities_change`.
 
 ```{r}
+md_cities_change <-md_cities_rates |> mutate(violent_rate_2020-violent_rate_2019/violent_rate_2020, property_rate_2020-property_rate_2019/property_rate_2020)
 ```
 
 ### Task 7: Describe Percentage Changes
 
 Look at the `md_cities_change` dataframe by clicking on it in the Environment tab in RStudio. Write a couple of sentences describing the percentage change results. What's more interesting here, the patterns or the outliers? What's the story in the data?
 
-ANSWER HERE
+Going from 2019 to 2020, both property crimes and violent crimes increased in nearly every community. I add "nearly" because, although there is a pattern here, outliers include the cities where data wasn't reported for 2020 or, how in one city, property crime (Middletown) and violent crime (Frederick) actually decreased. I think both the outliers and pattern is interesting, but I'd focus on the pattern of increase more because, as we learned on Tuesday, crime as a whole is generally trending down since the turn of the 2000s yet, here, it shows how both property and violent crimes have increased throughout Maryland in a year span.
 
 ### Task 8: Tell the Best Story
 
 Write up a lede and nutgraf of a story with the _best_ story idea you've found in this assignment. The lede should be a single sentence that summarizes the most important information in the data. The nutgraf should be a paragraph that provides more context and explains why the data is important.
 
-ANSWER HERE
+When compared to how crime has slowed down across the country, Maryland's the outlier where it doesn't want to be.
+
+As crime averages have gone down nationally, nearly every Maryland county reported increases in both violent and property crime rates from 2019 to 2020. Some cities, like Ocean City, lead the charge with the most violent and property crimes in the state as locals worry about the lack of response from year-to-year by Maryland police and officials.
 
 ### Task 9: Save Your Work and Put it on GitHub
 
