@@ -26,7 +26,7 @@ Calculate violent and property crime rates for each city for both years using `m
 
 ```{r}
 
-md_cities_rates <- City_crime |> mutate(violent_rate_2019 = violent2019/pop2019*10000, property_rate_2019 = property2019/pop2019*10000, violent_rate_2020 = violent2020/pop2020*10000, property_rate_2020 = property2020/pop2020*10000)
+md_cities_rates <- City_crime |> mutate(violent_rate_2019 = violent2019/pop2019*1000, property_rate_2019 = property2019/pop2019*1000, violent_rate_2020 = violent2020/pop2020*1000, property_rate_2020 = property2020/pop2020*1000)
 
 ```
 
@@ -62,3 +62,21 @@ As crime averages have gone down nationally, nearly every Maryland county report
 ### Task 9: Save Your Work and Put it on GitHub
 
 Save this notebook, then commit it to your local repository. Push the changes to your GitHub repository and submit the URL for this file in ELMS.
+
+### Task 10: Homework 5
+
+Using the 2020 violent crime rate, calculate the percentiles using `ntile()`. Save the results to a new dataframe called `md_cities_percentiles`. How many cities are above the 90th percentile?
+
+```{r}
+md_cities_percentile<-md_cities_rates |>mutate(percentile = ntile(violent_rate_2020, 100))
+Eleven cities are in the 90th percentile
+```
+
+
+Calculate the Interquartile Range of the 2020 violent crime rate using `summarize()` and R's `IQR()` function. The syntax is similar to how `mean()` works.
+Do the results change your best story idea from the previous assignment? Why or why not?
+
+```{r}
+md_cities_change|> summarize(violent_2020_IQR = IQR(violent_rate_2020))
+```
+The results do not change my best story idea from the previous assignment because, like my previous assignment shows, the IQR confirms how crime has increased significantly throughout Maryland from 2019 to 2020.
