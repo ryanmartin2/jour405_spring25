@@ -5,27 +5,80 @@ title: "HW7_MandMs"
 In this assignment, you'll be picking up where you left off with the M&Ms activity. You'll load the data and perform some basic statistical analysis. Follow the steps below to complete the assignment.
 
 ### Task 1: Load the tidyverse
+```{r}
+library(tidyverse)
+```
+
 
 
 ### Task 2: Load the M&Ms dataset from https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv
+```{r}
+M_and_Ms <- read_csv("https://raw.githubusercontent.com/dwillis/jour405/refs/heads/main/data/mandms.csv")
+```
 
 
-### Task 3: Sample 5 rows of data from the dataset
+
+### Task 3: Sample 5 rows of data from the dataset, and then sample 10 rows, saving each to separate dataframes called sample5 and sample10. Be sure to use set.seed(1234) before you start.
+```{r}
+set.seed(1234) # Setting seed for reproducibility
+  sample5 <- M_and_Ms |> 
+      sample_n(5)
+  
+  set.seed(1234) # Setting seed for reproducibility
+  sample10 <- M_and_Ms |> 
+      sample_n(10)
+```
+
+### Task 4: Calculate the mean and standard deviation of the two samples, using one of the colors.
+```{r}
+sample5 |> summarize(mean = mean(red), sd = sd(red))
+sample10 |> summarize(mean = mean(red), sd = sd(red))
+```
 
 
-### Task 4: Calculate the mean age and standard deviation of the sample, using either the blue or white number of M&Ms
+### Task 5: Calculate the mean and standard deviation of the original dataset, using the same color as Task 4
+```{r}
+M_and_Ms |> summarize(mean = mean(red), sd = sd(red))
+
+```
 
 
-### Task 5: Calculate the mean age and standard deviation of the population, using the same measure as in Task 4
+
+### Task 6: Make three histograms: one each for sample5, sample10 and the original dataset. Use a consistent binwidth.
+```{r}
+sample5 |> 
+  ggplot() +
+  geom_histogram(aes(x = red), binwidth = 3) +
+  geom_vline(aes(xintercept =mean(red)), color ='red', linetype = "dashed")
+             
+sample10|> 
+  ggplot() +
+  geom_histogram(aes(x = red), binwidth = 3) +
+  geom_vline(aes(xintercept =mean(red)), color ='red', linetype = "dashed")
+
+M_and_Ms|> 
+  ggplot() +
+  geom_histogram(aes(x = red), binwidth = 3) +
+  geom_vline(aes(xintercept =mean(red)), color ='red', linetype = "dashed")
+
+```
 
 
-### Task 6: Compare the sample and population statistics
+### Task 7: Answer some questions
 
-Compare the two sets of means and standard deviations. Are they similar?
+Compare the three sets of means, standard deviations and histograms. Which are more helpful to you in understanding the accuracy of the samples?
 
-### Task 7: Describe the results
+The three histograms is the most helpful in understanding the accuracy of the data. The histograms allow you to understand the data and compare it more easily to the samples than the strictly numeric sets of means and standard deviations allow.
 
-Write a few sentences about what you found in the data. What does this tell you about the M&Ms dataset and about the act of random sampling?
+What does this exercise tell you about the relationship between sample size and estimate accuracy?
+
+This exercise shows that as the sample increases, the estimated accuracy of the data becomes more accurate because it becomes more truly representative of the data.
+
+How does random sampling introduce variation into statistical estimates?
+Random sampling brings variation into the statistical estimates because you aren't sure what true diversity and variation will be represented when you pick through a rample sample.
+
+If you repeated this process, would the samples always be identical? Why or why not?
+No, the new sample definitely would not be identical because of the probabilities with random sampling — random sampling will mean that variation will come through and change when the samples are repeated.
 
 
 When finished, save your work, switch to GitHub Desktop, then add, commit and push your changes to GitHub and submit the URL of the notebook in ELMS.
