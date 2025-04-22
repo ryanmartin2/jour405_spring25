@@ -1,0 +1,14 @@
+---
+title: "Final_Project"
+output: html_document
+---
+
+```{r}
+#Load Dataset
+
+Viewership_Stats <-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTxh6lyUk5C5u2dKVpm9DgqXXlOiGai6rJWxNicrOPw9z_OBq-3b8_T2qkvaEEnBNmvTPA8VKm5zDUa/pub?output=csv")
+```
+
+#Legalization Statistics - https://www.actionnetwork.com/news/legal-sports-betting-united-states-projections#illinois
+
+This data describes what the legalization timeline was for both online and in-person sports betting for all 50 US States. This statistic uses data that appears to be independently searched and sourced by Action Network, a sports media company featuring news and analysis focused on sports betting in the United States. All of this data is centrally located in the article but can be confirmed by looking at individual state legislature. The data covers the time period of when sports betting was legalized in each state, important information that can then be used to narrow down our searches to the 16 schools in the B1G states, the 14 states with legalized sports betting, and the 13 states with legalized online sports betting. The biggest problem with this data is how it fluctuates how specific it is. Some states are given just a year in which sports betting was legalized, others are given a month and some states have the day that the first bet was placed noted. This will need to be distincted to have a specific range to say when all states legalized sports betting — if a state legalizes sports betting in the middle of the college football season, would the "Viewership in the year before" be that year or the year prior? As of now, if the state legalized online sports betting between September to November, the idea with the data is to call that the year before sports betting became common practice in that state, therefor quantifying it as "Viewership in the year before" data.
