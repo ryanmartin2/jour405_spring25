@@ -1,0 +1,88 @@
+---
+title: "Identifying Schools with Biggest Differences in Math Test Scores, Part 2"
+author: Ryan Martin
+---
+
+```{r}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+options(scipen = 999)
+```
+
+### Introduction
+
+We'll do what we did in class, but with a twist: instead of Montgomery County, Pa., you'll be working with data from Montgomery County, Md. Same basic idea, though: linear regression looking at free and reduced-price meals and math test scores.
+
+Just as in the exercise, you will create a scatterplot to visualize the relationship between the FARMS (Free and Reduced-price Meal System) percentage and the percentage of students who met or exceeded math expectations. You'll then use linear regression to identify the schools that show the biggest differences between their actual and expected math test scores and evaluate the results of your model.
+
+### Loading the Data
+
+First, let's load the data into a data frame using the read_csv() function from the tidyverse library.
+
+```{r}
+schools <- read_csv("https://raw.githubusercontent.com/dwillis/jour405_files/refs/heads/main/montgomery_md.csv")
+```
+### Task: Create a Scatterplot and Describe the Results (5 points)
+
+First, let's create a scatterplot to visualize the relationship between the FARMS percentage and the percentage of students who met or exceeded math expectations. We'll use ggplot2 to create the plot and add a linear regression line.
+
+```{r}
+schools |>
+  ggplot(aes(x = `FARMS Pct`, y = `% Met or Exceeded Math Expectations`)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "red") +
+  labs(x = "FARMS Percentage", y = "% Met or Exceeded Math Expectations", title = "Scatterplot of Math Expectations vs FARMS Percentage")
+```
+Based on what you see here, what's the relationship between FARMS percentage and math test scores? Compare this scatterplot to the one you made in the class activity.
+
+Here, there looks like there's much more of a relationship between FARMS percentage and math test scores compared to what we saw with the Montgomery County, Pa data. The scattered plots certainly are all over the place, representing a potnetially high standard deviation, but the correlation here should be expected to be much higher than the classwork activity showed.
+
+
+### Task: Linear Regression Model (7 points)
+
+Next, you'll perform a linear regression analysis using the lm() function. We'll set the percentage of students who met or exceeded math expectations as the dependent variable, and the FARMS percentage as the independent variable. In other words, if we know the FARMS percentage for a school, how reliably can we predict its math score?
+
+```{r}
+model <- lm(`% Met or Exceeded Math Expectations` ~ `FARMS Pct`, data = schools)
+
+summary(model)
+```
+
+Provide the model's output for the three statistics mentioned in the class activity.
+
+The p-value: less than 0.00000000000000022
+The Adjusted R-squared value: .676
+The coefficients: 
+(Intercept) 68.04878    1.74143   39.08 <0.0000000000000002 ***
+`FARMS Pct` -0.59511    0.03685  -16.15 <0.0000000000000002 ***
+
+Based on what you've learned so far, what does it tell us about the nature of the relationship between FARMS percentage and math scores? Is this model worth exploring further? Why or why not?
+
+Here, we can see that the relationship between FARMS percentage and math scores is way more correlated than we saw in the class activity, as apparent with the p-value that practically equals zero. This model is worth exploring further because it shows deep correlation between the two variables; we should continue to investigate why that is.
+
+### Task: Identifying Schools with Biggest Residuals (3 points)
+
+Let's calculate and examine the residuals next. 
+
+```{r}
+schools$predicted <- predict(model)
+
+# Calculate the residuals
+schools <- schools |> 
+  mutate(residual = `% Met or Exceeded Math Expectations` - predicted)
+
+# Sort the data frame by the absolute value of the residuals in descending order
+schools <- schools |>
+  mutate(abs_residual = abs(residual)) |>
+  arrange(desc(abs_residual))
+
+```
+
+Look at the absolute values of the residuals; what are the largest differences between the predicted result and the actual math scores? Pick two schools with the largest residuals. Find the zip codes where they are located and using the CensusReporter.org website, describe the most interesting demographic data from each zip code.
+
+The largest differences between the predicted result and the actual math scores were at Stedwick and Greencastle elementary schools. Two schools with the largest residuals were at Wayside Elementary (Potomac, Zip Code 20854) and Travilah Elementary (North Potomac, Zip Code 20878). The most interesting demographic data from each zip code is that White and Asian people make up a majority of the population in both, combining to account for 81% and 68% of the population, respectively.
+## Task: Evaluate the model (5 points)
+
+Describe what conclusions you'd draw from this model's results and how it would influence a story pitch about the school board member and math scores.
+
+From the model's results we can clearly see that there's a correlation, cause-and-effect relationship between the math scores and FARMS percentage, influencing the next questions we can ask about the school board member and math scores. Now that we know the "What", which is the causal relationship, we can now ask the why — why has this worked out favorably? Why specifically has the FARMS program/reduced-price meals led to higher test scores? I think this data needs to be expanded out to see what math scores looked like before the idea of reduced-price meals was even a thing in these elemntary schools. Then, we can specify our story pitch, only looking at communities where reduced-price meals have been most impactful and compare what the math scores were like before and after different priced meals were introduced.
