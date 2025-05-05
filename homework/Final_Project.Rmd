@@ -6,9 +6,42 @@ output: html_document
 ```{r}
 #Load Dataset
 
-Viewership_Stats <-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTxh6lyUk5C5u2dKVpm9DgqXXlOiGai6rJWxNicrOPw9z_OBq-3b8_T2qkvaEEnBNmvTPA8VKm5zDUa/pub?output=csv")
+Transfer_Stats <-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTxh6lyUk5C5u2dKVpm9DgqXXlOiGai6rJWxNicrOPw9z_OBq-3b8_T2qkvaEEnBNmvTPA8VKm5zDUa/pub?output=csv")
+
+Non_Transfer_Stats <-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTxh6lyUk5C5u2dKVpm9DgqXXlOiGai6rJWxNicrOPw9z_OBq-3b8_T2qkvaEEnBNmvTPA8VKm5zDUa/pub?gid=2050881943&single=true&output=csv")
+
+Maryland_Stats_Willard <-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTxh6lyUk5C5u2dKVpm9DgqXXlOiGai6rJWxNicrOPw9z_OBq-3b8_T2qkvaEEnBNmvTPA8VKm5zDUa/pub?gid=1795258445&single=true&output=csv")
+
+Seton_Hall_Stats_Willard <-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTxh6lyUk5C5u2dKVpm9DgqXXlOiGai6rJWxNicrOPw9z_OBq-3b8_T2qkvaEEnBNmvTPA8VKm5zDUa/pub?gid=1874426111&single=true&output=csv")
 ```
 
-#Legalization Statistics - https://www.actionnetwork.com/news/legal-sports-betting-united-states-projections#illinois
+# Task 1: Explanation of Final Project
 
-This data describes what the legalization timeline was for both online and in-person sports betting for all 50 US States. This statistic uses data that appears to be independently searched and sourced by Action Network, a sports media company featuring news and analysis focused on sports betting in the United States. All of this data is centrally located in the article but can be confirmed by looking at individual state legislature. The data covers the time period of when sports betting was legalized in each state, important information that can then be used to narrow down our searches to the 16 schools in the B1G states, the 14 states with legalized sports betting, and the 13 states with legalized online sports betting. The biggest problem with this data is how it fluctuates how specific it is. Some states are given just a year in which sports betting was legalized, others are given a month and some states have the day that the first bet was placed noted. This will need to be distincted to have a specific range to say when all states legalized sports betting — if a state legalizes sports betting in the middle of the college football season, would the "Viewership in the year before" be that year or the year prior? As of now, if the state legalized online sports betting between September to November, the idea with the data is to call that the year before sports betting became common practice in that state, therefor quantifying it as "Viewership in the year before" data.
+After conversations with Prof. Willis, I have adjusted my final project data and overarching question. When reflecting to former Maryland men's basketball coach Kevin Willard's tenure in College Park, a consistent theme with his teams was the need for improved and increased thrre-point shooting. So, to Willard's credit, Maryland attacked the transfer portal and often brought in players who were known as shooting three-point shots well at their previous schools. But when these players got to Maryland, often from smaller schools that played lower levels of competition, how successful were they at continuing their three-point efficiency going up against Big Ten Competition. This project evaluates all of that, looking closer into the twelve transfers Willard brought in during his time here and seeing how their three-point shooting at their previous school compared to their three-point shooting at Maryland. Collectively, the players actually shot better at Maryland than they combined to shoot at their previous institutions — so why is that?
+
+# T Test with transfers
+```{r}
+T_test <-t.test(Transfer_Stats ~ X3P.Shooter, data = Change, na.rm = TRUE)
+
+print(t_test)
+```
+
+
+Another good indicator on if the average transfer for Maryland men's basketball increased his three point shooting once getting to Maryland would be by running a random sample test. A random sample test would give us variability and, although it wouldn't quantify how likely any given player would be to shoot better at Maryland compared to at their previous school, it would help us better understand the data by making it smaller. This becomes especially opportunistic once we shrink the data to only account for players who are potentially "3 Point Shooters", or any player in the data who has attempted 10 or more three-pointers in a season. This brings our data from 12 transfers to 10 (meaning that over 80% of the transfers Willard brought in are three-point shooters by our given metric) and from 16 non-transfers to 10 (just 63%). Essentially, we're taking out the outliers in the data who never truly spent time on the court to shoot three-pointers, therefor means are just blurring the data.
+
+# Random Sampled T-Test
+```{r}
+Sampled_Data <- bind_rows (X3P.Shooter, Non.3P.Shooter)
+Sampled_T_Test <-T_test(Transfer_Stats ~ X3P.Shooter, data = Sampled_Data)
+```
+
+The best and most telling test for this kind of data would be a paired T test for the transfers to see if there's a correlation between them changing schools and them shooting either better or worse three-point percentages. A paired t-test will take the congregate mean of the players' mean three-point percentage at their previous schools and see if there's a statistically significant difference with that and their new three-point percentage at Maryland. This metric can and should also be used on Maryland players who never transferred, giving us a baseline to see if it's truly the transfers that Willard's bringing in or just the coaching/environment at Maryland which can lead to differentiation in three-point shooting.
+
+# Paired T Test
+```{r}
+Paired_T<-t.test(Transfer_Stats ~ X3P.Shooter, data = Change, paired = TRUE)
+
+```
+# Questions, Errors that still remain
+Firstly, importing my code wrong for the three tests is causing a roadblock of data simply not loading and stopping my visual understanding of the data I'm seeing. I searched the web and went back through previous assignments to see where my code is off, but I'm thinking it's inaccuracies or inconsistencies in my imported dataset. But once that gets figured out, I think I'm going to be honing in on a few different stats within my dataset that could tell the picture of my research. I really want to lock into the change in transfers' three-point efficiency and see if those year-by-year numbers are consistent for any random player under Kevin Willard or if the data does indeed show that transfers are more efficient three-point shooters than non-transfers, comparing that as well to how efficient they previously shot at their old school. I think another interesting thing would be to look at the Maryland_Stats_Willard table and notice the increasing percentage of three-point shooting for Maryland that came via transfers and how that figure spiked this year. There's been a clear emphasis for Willard to get better shooting by dipping into the transfer portal — I now just want to either quantify that and back it up with data or run unbiased tests with the acknowledgment that this prior hypothesis could become disproven.
+
