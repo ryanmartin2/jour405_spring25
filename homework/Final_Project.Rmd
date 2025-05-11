@@ -4,6 +4,8 @@ output: html_document
 ---
 
 ```{r}
+library(tidyverse)
+
 #Load Dataset
 
 Transfer_Stats <-read.csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTxh6lyUk5C5u2dKVpm9DgqXXlOiGai6rJWxNicrOPw9z_OBq-3b8_T2qkvaEEnBNmvTPA8VKm5zDUa/pub?output=csv")
@@ -43,5 +45,6 @@ Paired_T<-t.test(Transfer_Stats ~ X3P.Shooter, data = Change, paired = TRUE)
 
 ```
 # Questions, Errors that still remain
+
 Firstly, importing my code wrong for the three tests is causing a roadblock of data simply not loading and stopping my visual understanding of the data I'm seeing. I searched the web and went back through previous assignments to see where my code is off, but I'm thinking it's inaccuracies or inconsistencies in my imported dataset. But once that gets figured out, I think I'm going to be honing in on a few different stats within my dataset that could tell the picture of my research. I really want to lock into the change in transfers' three-point efficiency and see if those year-by-year numbers are consistent for any random player under Kevin Willard or if the data does indeed show that transfers are more efficient three-point shooters than non-transfers, comparing that as well to how efficient they previously shot at their old school. I think another interesting thing would be to look at the Maryland_Stats_Willard table and notice the increasing percentage of three-point shooting for Maryland that came via transfers and how that figure spiked this year. There's been a clear emphasis for Willard to get better shooting by dipping into the transfer portal — I now just want to either quantify that and back it up with data or run unbiased tests with the acknowledgment that this prior hypothesis could become disproven.
 
